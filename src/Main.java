@@ -1,15 +1,29 @@
-import java.lang.reflect.Array;
+import Classes.*;
+
 import java.sql.*;
 import java.util.Scanner;
 
 
 public class Main {
     public static void main(String[] args) {
+        DAOFactory daoFactory = DAOFactory.getInstance();
+
+        EmpDAO empDAO = daoFactory.getEmpDAO();
+
+        Emp emp7521 = empDAO.find(7521);
+        System.out.println(emp7521);
+
+        DeptDAO deptDAO = daoFactory.getDeptDAO();
+
+        Dept dept20 = deptDAO.find(20);
+        System.out.println(dept20);
+
+        // Old code before using DAOFactory
         /* Load JDBC Driver. */
-        try {
+        /*try {
             Class.forName( "org.postgresql.Driver" );
         } catch ( ClassNotFoundException e ) {
-            e.printStackTrace();
+            System.out.println( e.getMessage() );
         }
 
         String url = "jdbc:postgresql://localhost:5432/postgres";
@@ -18,23 +32,29 @@ public class Main {
         Connection connection = null;
 
         try {
+            // Connection to the database
             connection = DriverManager.getConnection( url, user, password );
-            // displayDepartment( connection );
-            // moveDepartment(connection, 7499, 10);
-            //displayTable(connection, "emp");
 
-            System.out.println("Db is connected");
+            // Retrieving information of department 20
+            DAO<Dept> departmentDAO = new DeptDAO( connection );
+            Dept dept20 = departmentDAO.find( 20 );
+            System.out.println( dept20 );
+
+            // Retrieving data about employee 7521
+            DAO<Emp> empDAO = new EmpDAO( connection );
+            Emp emp7521 = empDAO.find( 7521 );
+            System.out.println( emp7521 );
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println( e.getMessage() );
         } finally {
             if (connection != null) {
                 try {
                     connection.close();
-                } catch (SQLException ignored) {
-                    ignored.printStackTrace();
+                } catch (SQLException ignore) {
+                    System.out.println( ignore.getMessage() );
                 }
             }
-        }
+        }*/
     }
 
     public static void displayDepartment(Connection connection) throws SQLException {
