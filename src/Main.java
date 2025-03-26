@@ -1,5 +1,6 @@
 import java.lang.reflect.Array;
 import java.sql.*;
+import java.util.Scanner;
 
 
 public class Main {
@@ -19,7 +20,7 @@ public class Main {
         try {
             connection = DriverManager.getConnection( url, user, password );
             // displayDepartment( connection );
-            // moveDepartment(connection, 7499, 30);
+            // moveDepartment(connection, 7499, 10);
             //displayTable(connection, "emp");
 
             System.out.println("Db is connected");
@@ -52,10 +53,15 @@ public class Main {
     }
 
     public static void moveDepartment(Connection connection, int empno, int deptno) throws SQLException {
-        String query = "UPDATE emp SET deptno = " + deptno + " WHERE empno = " + empno;
+        String query = "UPDATE emp SET deptno = ? WHERE empno = ?";
 
-        try (Statement statement = connection.createStatement()) {
-            int rowsAffected = statement.executeUpdate( query );
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            Scanner scanner = new Scanner(System.in);
+
+            preparedStatement.setInt(1, deptno);
+            preparedStatement.setInt(2, empno);
+
+            int rowsAffected = preparedStatement.executeUpdate();
 
             // Check if the employee was moved
             if (rowsAffected > 0) {
